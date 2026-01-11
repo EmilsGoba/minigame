@@ -15,32 +15,38 @@
         </div>
     </div>
 
-    <hr>
+    <hr style="margin: 40px 0;">
 
-    <h2>🏆 Memory Match Leaderboard (Top 10)</h2>
-    <table style="margin: 20px auto; border-collapse: collapse; width: 80%; max-width: 600px;">
-        <thead>
-            <tr style="background: #f4f4f4;">
-                <th style="padding: 10px; border: 1px solid #ddd;">Rank</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">User</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Level</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($leaderboard as $index => $score): ?>
-                <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= $index + 1 ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($score['username']) ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= $score['level'] ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= $score['time_seconds'] ?>s</td>
-                </tr>
-            <?php endforeach; ?>
-            <?php if (empty($leaderboard)): ?>
-                <tr><td colspan="4" style="padding: 20px;">No scores yet. Be the first!</td></tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+    <h2>🏆 Memory Match Leaderboards</h2>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 20px;">
+        <?php foreach ($leaderboards as $levelName => $scores): ?>
+            <div style="flex: 1; min-width: 280px; max-width: 350px;">
+                <h3 style="color: #2c3e50;"><?= htmlspecialchars($levelName) ?> Mode</h3>
+                <table style="margin: 10px auto; border-collapse: collapse; width: 100%; font-size: 0.9em;">
+                    <thead>
+                        <tr style="background: #f4f4f4;">
+                            <th style="padding: 10px; border: 1px solid #ddd;">Rank</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">User</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($scores as $index => $score): ?>
+                            <tr>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><?= $index + 1 ?></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($score['username']) ?></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><?= $score['time_seconds'] ?>s</td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php if (empty($scores)): ?>
+                            <tr><td colspan="3" style="padding: 15px; color: #777;">No scores yet.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </main>
 
 <?php require "views/components/footer.php"; ?>

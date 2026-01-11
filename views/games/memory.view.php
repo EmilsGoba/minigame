@@ -107,7 +107,6 @@
 
             if (matchedPairs === totalPairs) {
                 clearInterval(timerInterval);
-                alert("Congratulations! You finished in " + seconds + " seconds.");
                 saveScore(seconds);
             }
         } else {
@@ -123,15 +122,28 @@
     }
 
     function saveScore(finalTime) {
-        fetch('/save-memory-score', {
+        // URL updated to match your routes.php configuration
+        fetch('/save-score', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 time: finalTime,
-                difficulty_id: <?= $difficulty['difficulty_id'] ?>
+                difficulty_id: <?= (int)$difficulty['difficulty_id'] ?>
             })
-        }).then(() => {
-            console.log("Score saved!");
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert("Congratulations! You finished in " + finalTime + " seconds. Your score has been saved!");
+                window.location.href = "/"; // Redirect to see the new leaderboard entry
+            } else {
+                alert("Game finished, but there was an error saving your score.");
+                window.location.href = "/";
+            }
+        })
+        .catch(error => {
+            console.error("Error saving score:", error);
+            window.location.href = "/";
         });
     }
 </script>
