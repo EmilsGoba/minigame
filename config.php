@@ -4,9 +4,9 @@ return [
   "database" => [
   "host" => "localhost",
   "port" => "3306",
-  "dbname" => "eklase",
+  "dbname" => "minigames",
   "user" => "root",
-  "password" => "root",
+  "password" => "",
   "charset" => "utf8mb4"
   ]  
 ];

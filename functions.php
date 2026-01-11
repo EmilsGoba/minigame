@@ -1,44 +1,26 @@
 <?php
 
-function dd($data){
-    echo "<pre>";
-    var_dump($data);
-    echo "</pre>";
-    die();
+function redirect(string $path): void
+{
+	header("Location: {$path}");
+	exit;
 }
 
-function redirectIfNotFound($location = "/"){
-    http_response_code(404);
-    header("Location: $location", 302);
-    exit();
-}
-function guest() {
-    if (isset($_SESSION["logged_in"])) {
-        header("Location: /"); // redirect to homepage or dashboard
-        exit;
-    }
+function auth(): void
+{
+	if (!isset($_SESSION['user_id'])) {
+		redirect('/');
+	}
 }
 
-// 👨‍🎓 Student Middleware — Can only view their own grades
-function studentOnly() {
-    if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== 'student') {
-        header("Location: /login");
-        exit;
-    }
+function guest(): void
+{
+	if (isset($_SESSION['user_id'])) {
+		redirect('/home');
+	}
 }
 
-// 👩‍🏫 Teacher Middleware — Can see everything (admin-like)
-function teacherOnly() {
-    if (!isset($_SESSION["logged_in"]) || $_SESSION["role"] !== 'teacher') {
-        header("Location: /login");
-        exit;
-    }
-}
-
-// ✅ Authenticated (general check)
-function auth() {
-    if (!isset($_SESSION["logged_in"])) {
-        header("Location: /login");
-        exit;
-    }
+function e(?string $value): string
+{
+	return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
 }

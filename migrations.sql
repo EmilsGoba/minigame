@@ -1,7 +1,11 @@
+CREATE DATABASE minigames
+
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    nickname VARCHAR(50) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -68,9 +72,9 @@ CREATE TABLE typing_scores (
 
 
 
-SELECT u.nickname, ts.words_per_minute, ts.time_seconds
+SELECT u.username, ts.words_per_minute, ts.time_seconds
 FROM typing_scores ts
-JOIN users u ON ts.user_id = u.id
+JOIN users u ON ts.user_id = u.user_id
 JOIN difficulties d ON ts.difficulty_id = d.id
 WHERE d.name = 'Easy'
 ORDER BY ts.words_per_minute DESC
@@ -79,9 +83,9 @@ LIMIT 10;
 
 
 
-SELECT u.nickname, ms.time_seconds
+SELECT u.username, ms.time_seconds
 FROM memory_scores ms
-JOIN users u ON ms.user_id = u.id
+JOIN users u ON ms.user_id = u.user_id
 JOIN difficulties d ON ms.difficulty_id = d.id
 WHERE d.name = 'Hard'
 ORDER BY ms.time_seconds ASC

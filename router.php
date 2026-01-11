@@ -12,7 +12,4 @@ else{
     
 }
 
-if ($uri === '/student/dashboard') {
-    require 'controllers/student/dashboard.php';
-}
 

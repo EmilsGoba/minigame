@@ -1,0 +1,13 @@
+.typing-wrap { max-width: 900px; margin: 32px auto; padding: 0 16px; }
+.typing-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; }
+.typing-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: baseline; }
+.typing-stat { padding: 8px 12px; border: 1px solid #eee; border-radius: 6px; }
+.typing-text { font-size: 18px; line-height: 1.6; padding: 12px; background: #fafafa; border-radius: 6px; border: 1px solid #eee; }
+.typing-text .ch.correct { color: #0a7a0a; }
+.typing-text .ch.incorrect { color: #b00020; text-decoration: underline; }
+.typing-text .ch.current { background: #fff3cd; }
+.typing-controls { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+textarea { width: 100%; min-height: 120px; padding: 12px; border-radius: 6px; border: 1px solid #ddd; font-size: 16px; }
+button { padding: 10px 14px; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.typing-note { color: #555; font-size: 14px; margin-top: 8px; }

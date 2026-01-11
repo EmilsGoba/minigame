@@ -1,0 +1,7 @@
+.leaderboard-wrap { max-width: 900px; margin: 32px auto; padding: 0 16px; }
+.leaderboard-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; }
+.leaderboard-controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.leaderboard-controls select { padding: 8px 10px; border-radius: 6px; border: 1px solid #ddd; }
+.leaderboard-table { width: 100%; border-collapse: collapse; }
+.leaderboard-table th, .leaderboard-table td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+.leaderboard-note { color: #555; font-size: 14px; margin-top: 8px; }
