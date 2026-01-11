@@ -6,5 +6,6 @@ return [
     "/register" => "controllers/auth/register.php",
     "/logout" => "controllers/logout.php",
     "/memory" => "controllers/games/memory.php",
-    "/save-score" => "controllers/games/save-score.php" // Added to enable score saving
+    "/save-score" => "controllers/games/save-score.php",
+    "/typing" => "controllers/games/typing.php" // Add this line
 ];

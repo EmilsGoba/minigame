@@ -1,0 +1,60 @@
+/* Container for the game */
+.typing-wrap {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* The box where the text to type appears */
+.typing-text {
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    line-height: 2;
+    background: #f8f9fa;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: left;
+    word-wrap: break-word;
+    white-space: pre-wrap; /* Keeps spaces intact */
+}
+
+/* Individual character styles */
+.ch {
+    position: relative;
+    color: #444;
+}
+
+.ch.correct {
+    color: #27ae60;
+}
+
+.ch.incorrect {
+    color: #fff;
+    background-color: #e74c3c;
+    border-radius: 2px;
+}
+
+.ch.current {
+    border-bottom: 3px solid #2c3e50;
+    background-color: #d1ecf1;
+}
+
+/* Stats and inputs */
+.typing-row { display: flex; justify-content: space-around; gap: 10px; }
+.typing-stat { background: #eee; padding: 10px; border-radius: 5px; min-width: 100px; }
+
+#textInput {
+    width: 100%;
+    height: 120px;
+    font-size: 1.2rem;
+    padding: 15px;
+    margin-top: 10px;
+    border: 2px solid #2c3e50;
+    border-radius: 8px;
+    resize: none;
+}
