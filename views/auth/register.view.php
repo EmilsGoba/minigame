@@ -1,40 +1,38 @@
-<?php require "../App/views/components/head.php" ?>
-<link rel="stylesheet" href="CSS/main.style.css">
-<link rel="stylesheet" href="CSS/register.style.css">
+<?php require "views/components/header.php"; ?>
 
-<div class="center">
+<div class="auth-container">
+    <h1>Register</h1>
 
-<main class="auth-main-reg">
-    <div class="auth-div">
-        <h1 class="auth-h1" style="color:#000100;">Register</h1>
-        <form method="POST" class="auth-form">
-            <label class="auth-label" style="color:white">
-                Username
-                <input class="auth-input" name="username" value="<?= $_POST["username"] ?? "" ?>"/>
-            </label>
-            <?php if (isset($errors["username"])) { ?>
-                <p class="invalid-data"> <?= $errors["username"] ?> </p>
-            <?php } ?>
-            <label class="auth-label" style="color:white">
-                Email
-                <input class="auth-input" type="email" name="email" value="<?= $_POST["email"] ?? "" ?>"/>
-            </label>
-            <?php if (isset($errors["email"])) { ?>
-                <p class="invalid-data"> <?= $errors["email"] ?> </p>
-            <?php } ?>
-            <label class="auth-label" style="color:white">
-                Password
-                <br> 
-                <input class="auth-input" type="password" name="password" value="<?= $_POST["password"] ?? "" ?>"/>
-            </label>
-            <?php if (isset($errors["password"])) { ?>
-                <p class="invalid-data"> <?= $errors["password"] ?> </p>
-            <?php } ?>
-            <span style="font-size: 12px; color:white;" >(8 chars: 1 uppercase, 1 number, 1 symbol)</span>
-            <button class="auth-button">Submit</button>
-        </form>
-        <a href="/login">Log-in</a>
-    </div>
-</main>
+    <form method="POST" action="/register">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="<?= $_POST['username'] ?? '' ?>" required>
+            <?php if (isset($errors['username'])): ?>
+                <p class="error" style="color: red;"><?= $errors['username'] ?></p>
+            <?php endif; ?>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" value="<?= $_POST['email'] ?? '' ?>" required>
+            <?php if (isset($errors['email'])): ?>
+                <p class="error" style="color: red;"><?= $errors['email'] ?></p>
+            <?php endif; ?>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" required>
+            <small>(Minimum 6 characters)</small>
+            <?php if (isset($errors['password'])): ?>
+                <p class="error" style="color: red;"><?= $errors['password'] ?></p>
+            <?php endif; ?>
+        </div>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <p>Already have an account? <a href="/login">Login here</a></p>
 </div>
-<?php require "../App/views/components/footer.php" ?>
+
+<?php require "views/components/footer.php"; ?>

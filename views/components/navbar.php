@@ -1,42 +1,16 @@
-<?php require "views/components/header.php"; ?>
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">MINIGAMES</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/logout" class="logout-link">Logout</a>
+        </div>
+    </div>
+</nav>
 
 <style>
-    .navbar {
-        display: flex;
-        gap: 20px;
-        background-color: #333;
-        padding: 10px;
-        list-style: none;
-    }
-
-    .navbar li {
-        display: inline;
-    }
-
-    .navbar a {
-        color: white;
-        text-decoration: none;
-        padding: 8px 12px;
-        border-radius: 4px;
-    }
-
-    .navbar a:hover {
-        background-color: #555;
-    }
-
-    body {
-        body: 0;
+    .logout-link {
+        color: var(--danger) !important;
+        font-weight: bold;
     }
 </style>
-
-<header>
-    <nav class="navbar">
-        <li><a href="/" class="home">Home</a></li>
-        <li><a href="/grades" class="home">Grades</a></li>
-        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'teacher'): ?>
-            <li><a href="/create" class="Par-mums">Izveidot</a></li>
-        <?php endif; ?>
-        <li><a href="/logout" class="home">Logout</a></li>
-        <li><a href="/students">Students</a></li>
-    </nav>
-</header>

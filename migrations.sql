@@ -1,103 +1,112 @@
-CREATE DATABASE minigames;
+-- 1️⃣ CREATE DATABASE
+CREATE DATABASE minigames CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE minigames;
 
+-- 2️⃣ USERS
 CREATE TABLE users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB;
 
-
+-- 3️⃣ GAMES
 CREATE TABLE games (
-    id SERIAL PRIMARY KEY,
+    game_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
-);
-
+) ENGINE=InnoDB;
 
 INSERT INTO games (name) VALUES
 ('Memory Card Match'),
 ('Typing Speed');
 
-
+-- 4️⃣ DIFFICULTIES (WITH GAME LOGIC SETTINGS)
 CREATE TABLE difficulties (
-    id SERIAL PRIMARY KEY,
-    game_id INT REFERENCES games(id) ON DELETE CASCADE,
+    difficulty_id INT AUTO_INCREMENT PRIMARY KEY,
+    game_id INT NOT NULL,
     name VARCHAR(20) NOT NULL,
-    description TEXT
-);
 
+    -- Memory Card Match settings
+    grid_rows INT DEFAULT NULL,
+    grid_cols INT DEFAULT NULL,
 
--- Memory Game
-INSERT INTO difficulties (game_id, name, description) VALUES
-(1, 'Easy', '2x2 grid'),
-(1, 'Medium', '3x4 grid'),
-(1, 'Hard', '4x5 grid');
+    -- Typing Speed settings
+    word_count INT DEFAULT NULL,
 
--- Typing Speed
-INSERT INTO difficulties (game_id, name, description) VALUES
-(2, 'Easy', '≈50 words'),
-(2, 'Medium', '≈100 words'),
-(2, 'Hard', '≈150 words'),
-(2, 'HardCore', '≈300 words');
+    FOREIGN KEY (game_id) REFERENCES games(game_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
+-- Memory Card Match difficulties
+INSERT INTO difficulties (game_id, name, grid_rows, grid_cols) VALUES
+(1, 'Easy', 2, 2),
+(1, 'Medium', 3, 4),
+(1, 'Hard', 4, 5);
 
+-- Typing Speed difficulties
+INSERT INTO difficulties (game_id, name, word_count) VALUES
+(2, 'Easy', 50),
+(2, 'Medium', 100),
+(2, 'Hard', 150),
+(2, 'HardCore', 300);
 
+-- 5️⃣ MEMORY SCORES (TIME BASED)
 CREATE TABLE memory_scores (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    difficulty_id INT REFERENCES difficulties(id) ON DELETE CASCADE,
+    score_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    difficulty_id INT NOT NULL,
     time_seconds INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (difficulty_id) REFERENCES difficulties(difficulty_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-CREATE TABLE typing_texts (
-    id SERIAL PRIMARY KEY,
-    difficulty_id INT REFERENCES difficulties(id) ON DELETE CASCADE,
-    content TEXT NOT NULL
-);
-
-
-
+-- 6️⃣ TYPING SCORES (WPM + TIME + ACCURACY)
 CREATE TABLE typing_scores (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    difficulty_id INT REFERENCES difficulties(id) ON DELETE CASCADE,
+    score_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    difficulty_id INT NOT NULL,
     time_seconds INT NOT NULL,
     words_per_minute INT NOT NULL,
     accuracy DECIMAL(5,2),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (difficulty_id) REFERENCES difficulties(difficulty_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
+-- 7️⃣ TYPING TEXTS (OPTIONAL, FOR RANDOM TEXT DISPLAY)
+CREATE TABLE typing_texts (
+    text_id INT AUTO_INCREMENT PRIMARY KEY,
+    difficulty_id INT NOT NULL,
+    content TEXT NOT NULL,
+    FOREIGN KEY (difficulty_id) REFERENCES difficulties(difficulty_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
-SELECT u.nickname, ts.words_per_minute, ts.time_seconds
-FROM typing_scores ts
-JOIN users u ON ts.user_id = u.id
-JOIN difficulties d ON ts.difficulty_id = d.id
-WHERE d.name = 'Easy'
-ORDER BY ts.words_per_minute DESC
-LIMIT 10;
+-- 8️⃣ LEADERBOARD EXAMPLES
 
-
-
-
-SELECT u.nickname, ms.time_seconds
+-- Memory Game – top 10 fastest times
+SELECT
+    u.username,
+    d.name AS difficulty,
+    ms.time_seconds
 FROM memory_scores ms
-JOIN users u ON ms.user_id = u.id
-JOIN difficulties d ON ms.difficulty_id = d.id
-WHERE d.name = 'Hard'
+JOIN users u ON ms.user_id = u.user_id
+JOIN difficulties d ON ms.difficulty_id = d.difficulty_id
+WHERE d.game_id = 1
 ORDER BY ms.time_seconds ASC
 LIMIT 10;
 
-
-
-/*
-
-INSERT INTO users (nickname) VALUES ('Sandis');
-
-INSERT INTO typing_scores (user_id, difficulty_id, time_seconds, words_per_minute)
-VALUES (1, 4, 15, 200);
-
-*/
+-- Typing Speed – top 10 words per minute
+SELECT
+    u.username,
+    d.name AS difficulty,
+    ts.words_per_minute,
+    ts.time_seconds
+FROM typing_scores ts
+JOIN users u ON ts.user_id = u.user_id
+JOIN difficulties d ON ts.difficulty_id = d.difficulty_id
+WHERE d.game_id = 2
+ORDER BY ts.words_per_minute DESC
+LIMIT 10;

@@ -1,43 +1,28 @@
 <?php
-guest(); // Prevents logged-in users from accessing this page
+guest(); 
 require "Validator.php";
 
 $errors = [];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-    if (empty($username) || empty($password)) {
-        $errors[] = "Username and password are required.";
+    $user = $db->query("SELECT * FROM users WHERE username = :username", [
+        'username' => $username
+    ])->fetch();
+
+    if ($user && password_verify($password, $user['password_hash'])) {
+        // Set session variables for middleware checks
+        $_SESSION['logged_in'] = true;
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role'];
+
+        header("Location: /");
+        exit;
     } else {
-        $sql = "SELECT * FROM users WHERE username = :username LIMIT 1";
-        $params = ['username' => $username];
-        $result = $db->query($sql, $params)->fetch();
-
-        if ($result) {
-            // Allow plain or hashed passwords
-            if (password_verify($password, $result['password']) || $password === $result['password']) {
-                $_SESSION['logged_in'] = true;
-                $_SESSION['user_id'] = $result['id'];
-                $_SESSION['username'] = $result['username'];
-                $_SESSION['role'] = $result['role'];
-
-                // Redirect based on role
-                if ($result['role'] === 'teacher') {
-                    header("Location: /grades");
-                } elseif ($result['role'] === 'student') {
-                    header("Location: /grades");
-                } else {
-                    header("Location: /");
-                }
-                exit;
-            } else {
-                $errors[] = "Nepareiza parole"; // Incorrect password
-            }
-        } else {
-            $errors[] = "Lietotājs nav atrasts"; // User not found
-        }
+        $errors['login'] = "Invalid username or password.";
     }
 }
 
